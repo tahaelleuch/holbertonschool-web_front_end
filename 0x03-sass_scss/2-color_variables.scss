@@ -1,0 +1,12 @@
+/* My style */
+$mycolor_one: #3D3D3D;
+$mycolor_two: #6D6D6D;
+body {
+  color: $mycolor_one;
+  background-color: $mycolor_two; }
+
+p {
+  color: $mycolor_one; }
+
+h2 {
+  background-color: $mycolor_two; }
