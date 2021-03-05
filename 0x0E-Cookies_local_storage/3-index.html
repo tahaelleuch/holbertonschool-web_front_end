@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookies</title>
+    <script>
+        function setCookies () {
+          let firstname = document.getElementById("firstname").value;
+          let email = document.getElementById("email").value;
+          let date = new Date();
+          date.setTime(date.getTime() + 10 * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+          document.cookie = `firstname=${firstname} ${expires}; path=/`;
+          document.cookie = `email=${email} ${expires}; path=/`;
+        }
+
+        function getCookie(name) {
+          let cookie = {};
+          decodeURIComponent(document.cookie).split(';').forEach(function(el) {
+            let [k,v] = el.split('=');
+            cookie[k.trim()] = v;
+          })
+          return cookie[name] || '';
+        }
+
+        function showCookies() {
+          let p = document.createElement("p");
+          p.innerHTML = `Cookies: Email: ${getCookie("email")} - Firstname: ${getCookie("firstname")}`;
+          document.querySelector("body").append(p);
+        }
+
+        function showForm() {
+          let welcome = document.getElementById('wlcmsg');
+          if (welcome) {
+            document.getElementById("wlcmsg").remove();
+          }
+          document.getElementById("form").style.display = "block";
+        }
+
+        function hideForm() {
+          document.getElementById("form").style.display = "none";
+        }
+
+        function deleteCookiesAndShowForm() {
+          document.cookie = "firstname=; expires=Thu, 01 Jan 1969 00:00:00 UTC; path=/;";
+          showForm();
+        }
+
+        function showWelcomeMessageOrForm() {
+          let myCookie = getCookie("firstname");
+          if (myCookie) {
+            hideForm();
+            let h2 = document.createElement("h2");
+            welcomeText = document.createTextNode(`Welcome: ${myCookie}`);
+            h2.appendChild(welcomeText);
+            h2.setAttribute("id", "wlcmsg");
+            let logout = document.createElement("a");
+            welcomeText = document.createTextNode("(logout)");
+            logout.appendChild(welcomeText);
+            logout.style.fontWeight = "normal";
+            logout.style.fontStyle = "italic";
+            logout.style.marginLeft = "10px";
+            logout.onclick = function () {
+              deleteCookiesAndShowForm();
+            };
+            h2.appendChild(logout);
+            document.body.appendChild(h2);
+          } else {
+            showForm();
+          }
+        }
+
+        function loginme() {
+          setCookies();
+          showWelcomeMessageOrForm();
+        }
+    </script>
+</head>
+<body>
+    <div id="form">
+      <h2>Login to the website</h2>
+      <input type="text" id="firstname" placeholder="Firstname" />
+      <input type="text" id="email" placeholder="Email" />
+      <button onclick="loginme()">Log me in</button>
+    </div>
+</body>
+</html>
